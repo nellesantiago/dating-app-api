@@ -46,10 +46,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_06_035415) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "email", null: false
+    t.string "password_digest", null: false
     t.string "mobile_number", null: false
-    t.datetime "birthdate", null: false
+    t.date "birthdate", null: false
     t.integer "gender", null: false
-    t.integer "gender_detail"
     t.integer "gender_interest", null: false
     t.string "country", null: false
     t.string "region", null: false
