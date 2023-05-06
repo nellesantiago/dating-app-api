@@ -48,3 +48,6 @@ end
 
 gem 'graphql'
 
+gem 'search_object'
+
+gem 'search_object_graphql'
