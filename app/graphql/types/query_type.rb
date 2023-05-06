@@ -6,6 +6,6 @@ module Types
 
     field :all_users, resolver: Resolvers::UserResolver
     field :all_matches, resolver: Resolvers::MatchResolver
-
+    field :all_messages, resolver: Resolvers::MessageResolver
   end
 end

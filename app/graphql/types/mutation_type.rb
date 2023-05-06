@@ -1,5 +1,6 @@
 module Types
   class MutationType < Types::BaseObject
+    field :message_create, mutation: Mutations::MessageCreate
     field :like_back, mutation: Mutations::LikeBack
     field :dislike, mutation: Mutations::Dislike
     field :like, mutation: Mutations::Like
