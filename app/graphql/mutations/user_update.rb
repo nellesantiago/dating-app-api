@@ -10,18 +10,15 @@ module Mutations
     argument :user_id, Integer, required: false
 
     def resolve(user_input:, user_id: nil)
-      token = context[:headers]["token"]
-      uid = context[:headers]["uid"]
-      user = resolve_user_by_id(uid)
-      validate_correct_user_or_admin_token(user, token)
+      authorize_user_or_admin_request
       
       if user_id && @user.admin?
-        user = resolve_user_by_id(user_id)
+        @user = resolve_user_by_id(user_id)
       end 
 
-      raise GraphQL::ExecutionError.new "#{user.errors.full_messages}" unless user.update(**user_input)
+      raise GraphQL::ExecutionError.new "Error updating user" unless @user.update(**user_input)
 
-      { user: user }
+      { user: @user }
     end
   end
 end

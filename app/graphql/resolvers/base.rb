@@ -6,9 +6,9 @@ module Resolvers
     include SearchObject.module(:graphql)
 
     def apply_filter(scope, value)
-    #   token = context[:headers]["token"]
+      #   token = context[:headers]["token"]
 
-    #   validate_token(token)
+      #   validate_token(token)
 
       branches = normalize_filters(scope, value).reduce { |a, b| a.or(b) }
       scope.merge branches
@@ -18,10 +18,10 @@ module Resolvers
       @scope = scope
       values.each do |key, v|
         unless key == :OR
-          if v == v.to_i.to_s
-            @scope = @scope.where("#{key} = ?", "#{v}")
-          else
+          if v.instance_of?(String)
             @scope = @scope.where("#{key} ILIKE ?", "%#{v.downcase}%")
+          else
+            @scope = @scope.where("#{key} = ?", v)
           end
         end
       end

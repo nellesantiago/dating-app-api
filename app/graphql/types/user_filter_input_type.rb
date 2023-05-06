@@ -3,7 +3,7 @@
 module Types
   class UserFilterInputType < Types::BaseInputObject
     argument :OR, [self], required: false   
-    argument :id, ID, required: false
+    argument :id, Integer, required: false
     argument :first_name, String, required: false
     argument :last_name, String, required: false
     argument :email, String, required: false
@@ -16,5 +16,6 @@ module Types
     argument :region, String, required: false
     argument :city, String, required: false
     argument :school, String, required: false
+    argument :role, Integer, required: false
   end
 end

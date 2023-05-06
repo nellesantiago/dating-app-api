@@ -3,6 +3,18 @@ class User < ApplicationRecord
   before_save :format_data
   validate :validate_age
 
+  has_many :likes_received, foreign_key: :to_user_id, class_name: "Match"
+  has_many :likers, through: :likes_received, source: :from
+
+  has_many :likes_given, foreign_key: :from_user_id, class_name: "Match"
+  has_many :likes, through: :likes_given, source: :to
+
+  has_many :blocks_received, foreign_key: :blocked_id, class_name: "Blacklist"
+  has_many :blockers, through: :blocks_received, source: :blocked_by
+
+  has_many :blocks_given, foreign_key: :blocked_by_id, class_name: "Blacklist"
+  has_many :blocks, through: :blocks_given, source: :blocked
+
   validates_presence_of :first_name, :last_name, :email, :mobile_number, :birthdate, :gender, :gender_interest, :country, :region, :city
 
   validates :email, uniqueness: true

@@ -49,5 +49,19 @@ module Mutations
         raise GraphQL::ExecutionError.new "User not found"
       end
     end
+    
+    def authorize_user_request
+      token = context[:headers]["token"]
+      uid = context[:headers]["uid"]
+      user = resolve_user_by_id(uid)
+      validate_correct_user_token(user, token)
+    end
+
+    def authorize_user_or_admin_request
+      token = context[:headers]["token"]
+      uid = context[:headers]["uid"]
+      user = resolve_user_by_id(uid)
+      validate_correct_user_or_admin_token(user, token)
+    end
   end
 end

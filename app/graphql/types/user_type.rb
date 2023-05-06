@@ -16,5 +16,6 @@ module Types
     field :school, String
     field :bio, String, null: false
     field :role, RoleType, null: false
+    field :matches, [Types::MatchType]
   end
 end
