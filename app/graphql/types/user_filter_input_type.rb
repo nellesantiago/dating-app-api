@@ -11,7 +11,9 @@ module Types
     argument :mobile_number, String, required: false
     argument :birthdate, GraphQL::Types::ISO8601Date, required: false
     argument :gender, GenderType, required: false
-    argument :gender_interest, GenderInterestType, required: false
+    argument :gender_interests, String, required: false
+    argument :id_filter, Integer, required: false
+    argument :matched_with_id, Integer, required: false
     argument :country, String, required: false
     argument :region, String, required: false
     argument :city, String, required: false

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_06_113523) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_07_055922) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,10 +49,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_06_113523) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "interests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "gender", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_interests_on_user_id"
+  end
+
   create_table "matches", force: :cascade do |t|
     t.integer "from_user_id", null: false
     t.integer "to_user_id", null: false
     t.integer "status", default: 0
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -75,12 +84,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_06_113523) do
     t.string "mobile_number", null: false
     t.date "birthdate", null: false
     t.integer "gender", null: false
-    t.integer "gender_interest", null: false
     t.string "country", null: false
     t.string "region", null: false
     t.string "city", null: false
     t.string "school"
-    t.string "bio"
+    t.string "bio", null: false
     t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -88,6 +96,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_06_113523) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "interests", "users"
   add_foreign_key "messages", "matches"
   add_foreign_key "messages", "users"
 end

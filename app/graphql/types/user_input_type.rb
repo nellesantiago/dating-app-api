@@ -10,7 +10,6 @@ module Types
     argument :mobile_number, String, required: false
     argument :birthdate, String, required: false
     argument :gender, GenderType, required: false
-    argument :gender_interest, GenderInterestType, required: false
     argument :country, String, required: false
     argument :region, String, required: false
     argument :city, String, required: false
@@ -18,5 +17,6 @@ module Types
     argument :bio, String, required: false
     argument :created_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :updated_at, GraphQL::Types::ISO8601DateTime, required: false
+    argument :image, [Types::UploadType], required: false
   end
 end

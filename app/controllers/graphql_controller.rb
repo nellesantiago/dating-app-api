@@ -11,7 +11,11 @@ class GraphqlController < ApplicationController
     context = {
       headers: request.headers,
     }
-    result = DatingAppApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    if params[:_json]
+      result = DatingAppApiSchema.multiplex(queries)
+    else
+      result = DatingAppApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    end
     render json: result
   rescue StandardError => e
     raise e unless Rails.env.development?

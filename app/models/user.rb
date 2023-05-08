@@ -1,7 +1,10 @@
 class User < ApplicationRecord
   has_secure_password
-  before_save :format_data
-  validate :validate_age
+  has_many_attached :image
+
+  has_many :interests, dependent: :destroy
+
+  before_save :validate_image
 
   has_many :messages, dependent: :destroy
 
@@ -17,13 +20,17 @@ class User < ApplicationRecord
   has_many :blocks_given, foreign_key: :blocked_by_id, class_name: "Blacklist", dependent: :destroy
   has_many :blocks, through: :blocks_given, source: :blocked
 
-  validates_presence_of :first_name, :last_name, :email, :mobile_number, :birthdate, :gender, :gender_interest, :country, :region, :city
+  validates_presence_of :first_name, :last_name, :email, :mobile_number, :birthdate, :gender, :country, :region, :city, :bio
 
   validates :email, uniqueness: true
 
-  validates :first_name, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }, length: { in: 1..20 }
+  before_save :format_data
 
-  validates :last_name, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }, length: { in: 1..20 }
+  validate :validate_age
+
+  validates :first_name, format: { with: /\A[A-Za-z]+(?: [A-Za-z]+)*\z/, message: "only allows letters" }, length: { in: 1..20 }
+
+  validates :last_name, format: { with: /\A[A-Za-z]+(?: [A-Za-z]+)*\z/, message: "only allows letters" }, length: { in: 1..20 }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
@@ -32,8 +39,7 @@ class User < ApplicationRecord
   validates :mobile_number, format: { with: /\A(09)\d{9}\z/ }
 
   enum role: { user: 0, admin: 1 }
-  enum gender: { man: 0, woman: 1, nonbinary: 3 }
-  enum gender_interest: { men: 0, women: 1, nonbinary_people: 3 }
+  enum gender: { man: 0, woman: 1, nonbinary: 2 }
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -43,11 +49,12 @@ class User < ApplicationRecord
 
   def format_data
     self.email = self.email.downcase
-    self.first_name = self.first_name.capitalize
-    self.last_name = self.last_name.capitalize
-    self.city = self.city.capitalize
-    self.region = self.region.capitalize
-    self.country = self.country.capitalize
+    self.first_name = self.first_name.titleize
+    self.last_name = self.last_name.titleize
+    self.city = self.city.titleize
+    self.region = self.region.titleize
+    self.country = self.country.titleize
+    self.school = self.school.titleize if self.school
   end
 
   def validate_age
@@ -57,6 +64,34 @@ class User < ApplicationRecord
   end
 
   def matches
-    Match.where("from_user_id = ? OR to_user_id = ?", self.id, self.id)
+    likes_received.where(status: "matched").pluck(:from_user_id) + likes_given.where(status: "matched").pluck(:to_user_id)
+  end
+
+  def validate_image
+    if image.empty?
+      errors.add(:image, "must include at least one photo")
+    elsif image.length > 5
+      errors.add(:image, "cannot exceed 5 photos")
+    end
+  end
+
+  def gender_interests
+    interests.pluck(:gender)
+  end
+
+  def blocked_by_user_ids
+    blockers.pluck(:id)
+  end
+
+  def blocked_users
+    blocks.pluck(:id)
+  end
+
+  def matched_user_ids
+    likes_received.pluck(:from_user_id) + likes_given.pluck(:to_user_id)
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end

@@ -56,3 +56,4 @@ gem 'jwt'
 
 gem "aws-sdk-s3", require: false
 
+gem 'apollo_upload_server'

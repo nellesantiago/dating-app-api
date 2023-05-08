@@ -13,11 +13,12 @@ unless User.where(email: "admin@email.com").any?
         mobile_number: "09091234567",
         password: "admin123",
         gender: "nonbinary",
-        gender_interest: "nonbinary_people",
         birthdate: Date.strptime("06/01/1998", "%m/%d/%Y"),
         country: "Philippines",
         region: "Metro Manila",
         city: "Pasig",
-        role: "admin"
+        school: "Pasig",
+        role: "admin",
+        bio: "I am the admin."
     )
 end

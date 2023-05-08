@@ -8,12 +8,11 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :mobile_number, null: false
       t.date :birthdate, null: false
       t.integer :gender, null: false
-      t.integer :gender_interest, null: false
       t.string :country, null: false
       t.string :region, null: false
       t.string :city, null: false
       t.string :school
-      t.string :bio
+      t.string :bio, null: false
       t.integer :role, default: 0
 
       t.timestamps

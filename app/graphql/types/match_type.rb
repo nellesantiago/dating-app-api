@@ -6,12 +6,18 @@ module Types
     field :from, Types::UserType, null: false
     field :to, Types::UserType, null: false
     field :status, StatusType, null: false
-    field :users, String, null: false
+    field :latest_message, String, null: false
+    field :messages, [Types::MessageType]
+    field :name, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    def users
-      [object.to.id, object.from.id]
+    def latest_message
+      if object.messages.any?
+        object.messages.latest.content
+      else
+        ""
+      end
     end
   end
 end
