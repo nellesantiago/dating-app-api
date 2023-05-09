@@ -4,7 +4,8 @@ class Match < ApplicationRecord
 
   has_many :messages, dependent: :destroy
 
-  before_save :set_name
+  before_validation :set_name
+  validates :name, uniqueness: true
 
   enum status: { pending: 0, matched: 1 }
 

@@ -20,6 +20,7 @@ module Types
     field :image_url, [Types::ImageType]
     field :interests, [Types::InterestType]
     field :age, Integer, null: false
+    field :matches_count, Integer, null: false
 
     def image_url
       if object.image.attached?
@@ -39,6 +40,10 @@ module Types
       days = Date.today.to_time - object.birthdate.to_time
       seconds = days / 1.year.seconds
       age = seconds.floor
+    end
+
+    def matches_count
+      object.matches.count
     end
   end
 end

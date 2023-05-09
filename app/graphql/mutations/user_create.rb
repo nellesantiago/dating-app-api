@@ -21,7 +21,7 @@ module Mutations
           user.interests.create(gender: interest)
         end
       else
-        raise GraphQL::ExecutionError.new "Error creating user", extensions: user.errors.to_hash
+        raise GraphQL::ExecutionError.new "#{user.errors.full_messages[0]}", extensions: user.errors.to_hash
       end
 
       { user: user }

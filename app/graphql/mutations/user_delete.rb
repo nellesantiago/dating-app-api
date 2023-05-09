@@ -9,12 +9,15 @@ module Mutations
     argument :user_input, Types::UserInputType, required: true
 
     def resolve(user_input:)
-      token = context[:headers]["token"]
+      authorize_user_or_admin_request
+
       user = resolve_user_by_id(user_input[:id])
 
-      validate_correct_user_or_admin_token(user, token)
-
-      raise GraphQL::ExecutionError.new "Error deleting user" unless user.destroy
+      if user == @user || @user.admin?
+        user.destroy
+      else
+        raise GraphQL::ExecutionError.new "Error deleting user"
+      end
 
       { user: user }
     end
