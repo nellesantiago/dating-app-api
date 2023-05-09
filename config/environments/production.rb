@@ -84,5 +84,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  routes.default_url_options[:host] = 'https://dating-app-api-x5ql.onrender.com'
+  routes.default_url_options[:host] = 'https://dating-app-api-8ok4.onrender.com'
 end
