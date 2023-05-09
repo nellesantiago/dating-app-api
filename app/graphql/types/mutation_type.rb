@@ -1,5 +1,6 @@
 module Types
   class MutationType < Types::BaseObject
+    field :image_delete, mutation: Mutations::ImageDelete
     field :like_check, mutation: Mutations::LikeCheck
     field :message_create, mutation: Mutations::MessageCreate
     field :like_back, mutation: Mutations::LikeBack

@@ -11,12 +11,20 @@ module Mutations
 
     def resolve(user_input:, user_id: nil)
       authorize_user_or_admin_request
-      
+      inputs = user_input.to_h
+
       if user_id && @user.admin?
         @user = resolve_user_by_id(user_id)
-      end 
+      end
 
-      raise GraphQL::ExecutionError.new "Error updating user" unless @user.update(**user_input)
+      attachment_count = @user.image.count + inputs[:image].count
+      raise GraphQL::ExecutionError.new "Image attachment count must not exceed to 5", extensions: @user.errors.to_hash unless attachment_count <= 5
+
+      if @user.update(inputs.except(:image, :id))
+        @user.image.attach(inputs[:image]) if inputs[:image]
+      else
+        raise GraphQL::ExecutionError.new "Error updating user", extensions: @user.errors.to_hash
+      end
 
       { user: @user }
     end

@@ -91,6 +91,10 @@ class User < ApplicationRecord
     likes_received.pluck(:from_user_id) + likes_given.pluck(:to_user_id)
   end
 
+  def liked_user_ids
+    likes_given.pluck(:to_user_id)
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

@@ -19,19 +19,26 @@ module Types
     field :matches, [Types::MatchType]
     field :image_url, [Types::ImageType]
     field :interests, [Types::InterestType]
+    field :age, Integer, null: false
 
     def image_url
       if object.image.attached?
         if Rails.env.production?
-          object.image.reduce([]) { |array_of_url, image| array_of_url + [{url: image.url, signed_id: image.id}]}
+          object.image.reduce([]) { |array_of_url, image| array_of_url + [{ url: image.url, signed_id: image.id }] }
         else
-          object.image.reduce([]) { |array_of_url, image| array_of_url + [{url: Rails.application.routes.url_helpers.rails_blob_url(image), signed_id: image.id}]}
+          object.image.reduce([]) { |array_of_url, image| array_of_url + [{ url: Rails.application.routes.url_helpers.rails_blob_url(image), signed_id: image.id }] }
         end
       end
     end
 
     def full_name
       object.full_name
+    end
+
+    def age
+      days = Date.today.to_time - object.birthdate.to_time
+      seconds = days / 1.year.seconds
+      age = seconds.floor
     end
   end
 end

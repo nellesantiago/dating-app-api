@@ -30,17 +30,11 @@ module Resolvers
         end
 
         if key == :id_filter
-          # @scope = @scope.select { |user| User.find(v).matched_user_ids.exclude?(user.id) && user.id != v }
-          # @scope = @scope.select { |user| user.blocked_by_user_ids.exclude?(v) && user.id != v }
-          # @scope = @scope.select { |user| user.blocked_users.exclude?(v) && user.id != v }
-          # @scope = @scope.select { |user| User.find(v).gender_interests.include?(resolve_interest(user.gender)) }
-          @scope = @scope.select do |user|
-            User.find(v).matched_user_ids.exclude?(user.id) &&
-            user.blocked_by_user_ids.exclude?(v) &&
-            user.blocked_users.exclude?(v) &&
-            User.find(v).gender_interests.include?(resolve_interest(user.gender)) &&
-            user.id != v
-          end
+          @scope = @scope.select { |user| User.find(v).liked_user_ids.exclude?(user.id) && user.id != v }
+          @scope = @scope.select { |user| User.find(v).gender_interests.include?(resolve_interest(user.gender)) }
+          @scope = @scope.select { |user| user.matches.exclude?(v) }
+          @scope = @scope.select { |user| user.blocked_by_user_ids.exclude?(v) }
+          @scope = @scope.select { |user| user.blocked_users.exclude?(v) }
         end
 
         if key == :matched_with_id
