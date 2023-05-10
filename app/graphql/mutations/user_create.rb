@@ -15,6 +15,10 @@ module Mutations
       user = ::User.new(inputs.except(:image))
       user.birthdate = Date.strptime(user_input[:birthdate], "%m/%d/%Y")
 
+      unless inputs[:image] && inputs[:image].count > 0
+        raise GraphQL::ExecutionError.new "At least one profile image is required", extensions: user.errors.to_hash
+      end
+
       if user.save
         user.image.attach(inputs[:image]) if inputs[:image]
         interests.split("/").each do |interest|

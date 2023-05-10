@@ -9,7 +9,9 @@ module Types
       description "action_dispatch_uploaded_file"
 
       return nil if input_values.nil?
-
+      if input_values.instance_of?(ActionDispatch::Http::UploadedFile)
+        return input_values
+      end
       values = input_values.values.each do |input_value|
         ActionDispatch::Http::UploadedFile.new(
           filename: input_value.original_filename,
