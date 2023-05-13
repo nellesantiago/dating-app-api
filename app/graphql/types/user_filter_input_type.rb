@@ -10,7 +10,7 @@ module Types
     argument :password, String, required: false
     argument :mobile_number, String, required: false
     argument :birthdate, GraphQL::Types::ISO8601Date, required: false
-    argument :gender, GenderType, required: false
+    argument :gender, Integer, required: false
     argument :gender_interests, String, required: false
     argument :id_filter, Integer, required: false
     argument :matched_with_id, Integer, required: false

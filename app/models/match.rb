@@ -10,6 +10,6 @@ class Match < ApplicationRecord
   enum status: { pending: 0, matched: 1 }
 
   def set_name
-    self.name = "#{self.from.full_name}/#{self.to.full_name}"
+    self.name = "#{self.from.full_name}/#{self.to.full_name}/#{self.created_at}"
   end
 end
